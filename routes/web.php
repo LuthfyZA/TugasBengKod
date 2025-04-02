@@ -3,7 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PeriksaController;
+use App\Http\Controllers\Auth\LoginController;
 
+// Rute untuk menampilkan form login
+Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+
+// Rute untuk memproses form login
+Route::post('/login', [LoginController::class, 'login']);
 
 Route::prefix('dokter')->group(function(){
     Route::resource('obat', ObatController::class);
