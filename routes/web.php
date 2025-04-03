@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PeriksaController;
+use App\Http\Controllers\HomeController;
+
+Route::get('/dokter', [HomeController::class, 'dokter'])->name('dokter');
 
 
 Route::prefix('dokter')->group(function(){
