@@ -15,10 +15,7 @@ class HomeController extends Controller
     {
         $this->middleware('auth');
     }
-    public function dokter()
-    {
-        return view('dokter.index');
-    }
+
     /**
      * Show the application dashboard.
      *
@@ -28,6 +25,9 @@ class HomeController extends Controller
     {
         return view('home');
     }
-    
+    public function dokter()
+    {
+        return view('dokter.index');
+    }
 
 }
