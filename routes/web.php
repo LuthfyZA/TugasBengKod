@@ -5,20 +5,12 @@ use App\Http\Controllers\ObatController;
 use App\Http\Controllers\PeriksaController;
 use App\Http\Controllers\HomeController;
 
-Route::get('/dokter', [HomeController::class, 'dokter'])->name('dokter');
-
-
-Route::prefix('dokter')->group(function(){
-    Route::resource('obat', ObatController::class);
-    Route::resource('periksa', PeriksaController::class);
-});
-
 // Halaman utama (Welcome)
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
-// Halaman Login & Register (Tanpa Middleware)
+// Halaman Login & Register
 Route::get('/login', function () {
     return view('auth.login');
 })->name('login');
@@ -27,7 +19,22 @@ Route::get('/register', function () {
     return view('auth.register');
 })->name('register');
 
-// Rute untuk Pasien (Tanpa Middleware)
+// Rute untuk Dokter
+Route::prefix('dokter')->group(function () {
+    // Dashboard dokter
+    Route::get('/', [HomeController::class, 'dokter'])->name('dokter');
+    Route::get('/dashboard', function () {
+        return view('dokter.dashboard');
+    })->name('dokter.dashboard');
+    
+    // Resource routes untuk Obat (CRUD)
+    Route::resource('obat', ObatController::class);
+    
+    // Resource routes untuk Periksa (CRUD)
+    Route::resource('periksa', PeriksaController::class);
+});
+
+// Rute untuk Pasien
 Route::prefix('pasien')->group(function () {
     Route::get('/dashboard', function () {
         return view('pasien.dashboard');
@@ -40,21 +47,4 @@ Route::prefix('pasien')->group(function () {
     Route::get('/riwayat', function () {
         return view('pasien.riwayat');
     })->name('pasien.riwayat');
-});
-
-// Rute untuk Dokter (Tanpa Middleware)
-Route::prefix('dokter')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dokter.dashboard');
-    })->name('dokter.dashboard');
-
-    Route::get('/periksa', function () {
-        return view('dokter.periksa');
-    })->name('dokter.periksa');
-
-    Route::get('/obat', function () {
-        return view('dokter.obat');
-    })->name('dokter.obat');
-
-    
 });
