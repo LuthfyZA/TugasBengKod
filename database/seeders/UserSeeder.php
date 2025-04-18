@@ -1,38 +1,39 @@
 <?php
-
 namespace Database\Seeders;
 
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use App\Models\Periksa;
-use App\Models\Obat;
-use App\Models\DetailPeriksa;
 
 class UserSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        User::create([
-            'nama' => 'Dr John Doe',
-            'alamat' => 'Jl. Dokter No.1',
-            'no_hp' => '081234567890',
-            'email' => 'johndoe@gmail.com',
-            'role' => 'Dokter',
-            'password' => Hash::make('password')
-        ]);
-
-        User::create([
-            'nama' => 'Jane Doe',
-            'alamat' => 'Jl. Pasien No.1',
-            'no_hp' => '081234567812',
-            'email' => 'Jane@gmail.com',
-            'role' => 'Pasien',
-            'password' => Hash::make('password')
+        DB::table('users')->insert([
+            // [
+            //     'nama' => 'Admin Sumber Waras',
+            //     'alamat' => 'Jl. Kesehatan No.1',
+            //     'no_hp' => '08123456789',
+            //     'email' => 'admin@sumberwaras.com',
+            //     'role' => 'admin',
+            //     'password' => Hash::make('password123'),
+            // ],
+            [
+                'nama' => 'Dr. Andi',
+                'alamat' => 'Jl. Medis No.2',
+                'no_hp' => '08129876543',
+                'email' => 'dr.andi@sumberwaras.com', // pastikan email valid
+                'role' => 'dokter',
+                'password' => Hash::make('password123'),
+            ],
+            [
+                'nama' => 'Budi Pasien',
+                'alamat' => 'Jl. Sehat No.3',
+                'no_hp' => '081212341234',
+                'email' => 'budi@sumberwaras.com',
+                'role' => 'pasien',
+                'password' => Hash::make('password123'),
+            ],
         ]);
     }
 }

@@ -21,27 +21,11 @@ class User extends Authenticatable
         'nama',
         'alamat',
         'no_hp',
-        'email',
         'role',
+        'email',
         'password',
     ];
 
-    // function buat kelola relasi dari 
-    // tabel users -one--to--many--> tabel Periksa 
-    public function periksaSebagaiPasien()
-    {
-        return $this->hasMany(Periksa::class, 'id_pasien');
-    }
-    public function periksaSebagaiDokter()
-    {
-        return $this->hasMany(Periksa::class, 'id_dokter');
-    }
-    // Sintaks versi Laravel
-    // One to One : hasOne
-    // One to Many : hasMany
-    // Many to One : belongsTo
-    // Many to Many : belongstoMany
-    
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -63,5 +47,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    
+    public function periksa_pasien()
+    {
+        return $this->hasMany(Periksa::class, 'id_pasien', 'id');
+    }
+
+    public function periksa_dokter()
+    {
+        return $this->hasMany(Periksa::class, 'id_dokter', 'id');
     }
 }

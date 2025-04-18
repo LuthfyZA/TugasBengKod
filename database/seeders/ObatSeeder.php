@@ -2,24 +2,28 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Periksa;
-use App\Models\Obat;
-use App\Models\DetailPeriksa;
+use Illuminate\Support\Facades\DB;
 
 class ObatSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Obat::create([
-            'nama_obat' => 'Paracetamol',
-            'kemasan' => 'Strip',
-            'harga' => 500000000,
+        DB::table('obats')->insert([
+            [
+                'nama_obat' => 'Paracetamol',
+                'kemasan' => 'Tablet',
+                'harga' => 10000,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
+            [
+                'nama_obat' => 'Amoxicillin',
+                'kemasan' => 'Kapsul',
+                'harga' => 10000,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ]);
     }
 }

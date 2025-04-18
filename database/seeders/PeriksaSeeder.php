@@ -2,25 +2,36 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use App\Models\Periksa;
-use App\Models\Obat;
-use App\Models\DetailPeriksa;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 class PeriksaSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        Periksa::create([
-            'id_pasien' => 2,
-            'id_dokter' => 1,
-            'tgl_periksa' => now(),
-            'catatan' => 'Demam dan pusing',
-            'biaya_periksa' => 50000,
+        DB::table('periksas')->insert([
+            [
+                'id_pasien' => 1,
+                'id_dokter' => 2,
+                'tgl_periksa' => Carbon::now(),
+                'catatan' => 'Pasien mengalami demam ringan',
+                'biaya_periksa' => 50000,
+            ],
+            [
+                'id_pasien' => 2,
+                'id_dokter' => 3,
+                'tgl_periksa' => Carbon::now()->subDays(2),
+                'catatan' => 'Keluhan sakit kepala dan pusing',
+                'biaya_periksa' => 60000,
+            ],
+            [
+                'id_pasien' => 3,
+                'id_dokter' => 1,
+                'tgl_periksa' => Carbon::now()->subDays(5),
+                'catatan' => 'Pasien mengalami batuk dan pilek',
+                'biaya_periksa' => 55000,
+            ],
         ]);
     }
 }

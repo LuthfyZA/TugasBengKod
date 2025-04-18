@@ -1,33 +1,87 @@
 @extends('layouts.app')
-@section('title', 'Tambah Obat')
-@section('content_header')
-<h1>Tambah Obat</h1>
+
+@section('title', 'Obat')
+
+@section('nav-item')
+    <li class="nav-item">
+        <a href="../memeriksa" class="nav-link">
+            <i class="nav-icon fas fa-sharp-duotone fa-solid fa-stethoscope"></i>
+            <p>Memeriksa</p>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a href="../obat" class="nav-link">
+            <i class="nav-icon fas fa-solid fa-pills"></i>
+            <p>Obat</p>
+        </a>
+    </li>
 @endsection
+
 @section('content')
-<div class="card">
-    <div class="card-body">
-        <form action="{{ route('obat.store') }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="nama">Nama obat</label>
-                <input type="text" name="nama_obat" id="nama" placeholder="Nama obat" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <label for="nama">Kemasan</label>
-                <x-adminlte-select name="kemasan">
-                    <x-adminlte-options :options="['pill' => 'Pill', 'sachet' => 'Sachet', 'botol' => 'Botol']"
-                    empty-option="Pilih kemasan"/>
-                </x-adminlte-select>
-            </div>
-            <div class="form-group">
-                <label for="nama">Harga</label>
-                <input type="number" name="harga" id="harga" placeholder="Harga obat" class="form-control" required>
-            </div>
-            <div class="wrapper d-flex justify-content-end" style="gap:10px;">
-                <button type="submit" class="btn btn-success">Tambah</button>
-                <a href="{{ route('obat.index') }}" class="btn btn-secondary">Kembali</a>
-            </div>
-        </form>
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Obat</h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="dashboard">Home</a></li>
+                        <li class="breadcrumb-item active">Obat</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
-</div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- left column -->
+                <div class="col-md-12">
+                    <!-- general form elements -->
+                    <div class="card card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title">Form Tambah Obat</h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <!-- form start -->
+                        <form method="POST" action="/dokter/obat">
+                            @csrf
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="nama-obat">Nama Obat</label>
+                                    <input type="text" class="form-control" id="nama-obat" name="nama_obat"
+                                     placeholder="Masukkan Nama Obat">
+                                </div>
+                                <div class="form-group">
+                                    <label for="kemasan">Kemasan</label>
+                                    <input type="text" class="form-control" id="kemasan" name="kemasan"
+                                        placeholder="Masukkan Kemasan Obat">
+                                </div>
+                                <div class="form-group">
+                                    <label for="harga-obat">Harga</label>
+                                    <input type="number" class="form-control" id="harga-obat" name="harga"
+                                        placeholder="Masukkan Harga Obat">
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-primary">Tambah</button>
+                            </div>
+                        </form>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+           
+            <!-- /.row -->
+
+        </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
 @endsection
