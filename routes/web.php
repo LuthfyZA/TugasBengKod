@@ -1,72 +1,106 @@
 <?php
 
-use App\Http\Controllers\MemeriksaController;
-use App\Http\Controllers\ObatController;
-use App\Http\Controllers\PeriksaController;
-use App\Models\Obat;
-use App\Models\Periksa;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DokterController;
+use App\Http\Controllers\PasienController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\AuthController;
 
-// Tambahkan Auth::routes() untuk mengaktifkan route autentikasi bawaan Laravel
-Auth::routes();
 
-// Route::get('/', function () {
-//     return view('layout.landingpage'); // Pastikan file berada di resources/views/layout/landingpage.blade.php
-// });
-
-// Route autentikasi original
-Route::get('/auth/login', function () {
-    return view('auth.login');
+Route::get('/', function () {
+    return redirect()->route('login');
 });
 
-Route::get('/auth/register', function () {
-    return view('auth.register');
-});
 
-// Tambahan route autentikasi
 Route::get('/login', function () {
     return view('auth.login');
-});
+})->name('login');
+Route::post('/login', [AuthController::class, 'login']);
+
 
 Route::get('/register', function () {
     return view('auth.register');
+})->name('register');
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+//DASHBOARD AUTHENTICATION
+Route::middleware(['auth'])->group(function () {
+
+    /* MIN min Admiiinn
+     * */
+    Route::middleware('role:admin')->prefix('admin')->name('admin.')->group(function () {
+        Route::get('/dashboard', [AdminController::class, 'adminDashboard'])->name('dashboard');
+
+        //CRUD DOKTER and PASIEN
+        Route::get('/dokter', [AdminController::class, 'showUsers'])->name('dokterMaster')->defaults('role', 'dokter');
+        Route::post('/dokter', [AdminController::class, 'createUser']);
+        Route::get('/dokter/edit/{id}', [AdminController::class, 'getUser']);
+        Route::put('/dokter/update/{id}', [AdminController::class, 'updateUser']);
+        Route::get('/dokter/delete/{id}', [AdminController::class, 'deleteUser']);
+
+        Route::get('/pasien', [AdminController::class, 'showUsers'])->name('pasienMaster')->defaults('role', 'pasien');
+        Route::post('/pasien', [AdminController::class, 'createUser']);
+        Route::get('/pasien/edit/{id}', [AdminController::class, 'getUser']);
+        Route::put('/pasien/update/{id}', [AdminController::class, 'updateUser']);
+        Route::get('/pasien/delete/{id}', [AdminController::class, 'deleteUser']);
+
+        // CRUD OBAT
+        Route::get('/obat', [AdminController::class, 'showObat'])->name('obatMaster');
+        Route::post('/obat', [AdminController::class, 'createObat']);
+        Route::get('/obat/edit/{id}', [AdminController::class, 'editObat']);
+        Route::post('/obat/update/{id}', [AdminController::class, 'updateObat']);
+        Route::get('/obat/delete/{id}', [AdminController::class, 'deleteObat']);
+
+        //CRUD FOR POLI
+        Route::get('/poli', [AdminController::class, 'showPolis'])->name('poliMaster');
+        Route::post('/poli', [AdminController::class, 'createPolis'])->name('createPolis');
+        Route::get('/poli/edit/{id}', [AdminController::class, 'editPoli'])->name('editPoli');
+        Route::post('/poli/update/{id}', [AdminController::class, 'updatePoli'])->name('updatePoli');
+        Route::get('/poli/delete/{id}', [AdminController::class, 'deletePoli'])->name('deletePoli');
+
+    });
+
+
+    /*PASIEN
+     * */
+    Route::middleware('role:pasien')->prefix('pasien')->name('pasien.')->group(function () {
+        Route::get('/dashboard', [PasienController::class, 'pasienDashboard'])->name('dashboard');
+
+        Route::get('/janji-periksa', [PasienController::class, 'showJanjiPeriksaPasien'])->name('janjiPeriksa');
+        Route::post('/janji-periksa', [PasienController::class, 'createJanjiPeriksa'])->name('createJanjiPeriksa');
+        Route::get('/jadwal-poli/{id}', [PasienController::class, 'jadwalOpenByPoli'])->name('jadwalOpenByPoli');
+
+
+        Route::get('/riwayat', [PasienController::class, 'showRiwayat'])->name('riwayat');
+
+    });
+
+    /*DOKTER
+     * */
+    Route::middleware('role:dokter')->prefix('dokter')->name('dokter.')->group(function () {
+        Route::get('/dashboard', [DokterController::class, 'dokterDashboard'])->name('dashboard');
+
+        Route::get('/memeriksa', [DokterController::class, 'notYetPeriksa'])->name('memeriksa');
+        Route::get('/memeriksa/{id}/edit', [DokterController::class, 'editPeriksa'])->name('memeriksEdit');
+        Route::put('/memeriksa/{id}', [DokterController::class, 'memeriksaPasien'])->name('memeriksaPasien');
+        Route::delete('/memeriksa/{id}', [DokterController::class, 'deleteJanjiPeriksa'])->name('tolakPeriksa');
+
+        // EDIT PROFILE
+        Route::get('/profile/{id}/edit', [DokterController::class, 'getProfile'])->name('dashboardEdit');
+        Route::put('/profile/{id}', [DokterController::class, 'editProfile'])->name('updateProfile');
+
+        // CRUD JADWALPERIKSA, name itu alias jadi view bisa pangil langsung
+        Route::get('/jadwal', [DokterController::class, 'dokterJadwal'])->name('jadwalPeriksa');
+        Route::post('/jadwal', [DokterController::class, 'storeJadwal'])->name('storeJadwal');
+        Route::get('/jadwal/edit/{id}', [DokterController::class, 'editJadwal'])->name('editJadwal');
+        Route::put('/jadwal/{id}', [DokterController::class, 'updateJadwal'])->name('updateJadwal');
+        Route::delete('/jadwal/{id}', [DokterController::class, 'deleteJadwal'])->name('deleteJadwal');
+
+        Route::patch('/jadwal/{id}/toggle-status', [DokterController::class, 'toggleStatusJadwal'])->name('toggleStatusJadwal');
+
+        // HITORY PEMERIKSAAN OLEH DOKTER
+        Route::get('/history-periksa', [DokterController::class, 'showHitoryPemeriksaan'])->name('historyPeriksa');
+
+    });
 });
-
-Route::get('/dokter/dashboard', function () {
-    return view('dokter.dashboard');
-});
-
-Route::get('/dokter/obat', [ObatController::class,"dashboard"]);
-Route::get('/dokter/obat/create', [ObatController::class,"create"]);
-Route::post('/dokter/obat', [ObatController::class,"store"]);
-Route::get('/dokter/obat/{id}/edit', [ObatController::class,"edit"]);
-Route::put('/dokter/obat/{id}', [ObatController::class,"update"]);
-Route::delete('/dokter/obat/{id}', [ObatController::class,"destroy"]);
-
-Route::get('/dokter/memeriksa', [MemeriksaController::class, "dashboard"]);
-Route::get('/dokter/memeriksa/{id}', [MemeriksaController::class, "memeriksa"]);
-Route::post('/dokter/memeriksa', [MemeriksaController::class, "store"]);
-Route::get('/dokter/memeriksa/{id}/edit', [MemeriksaController::class, "edit"]);
-Route::put('/dokter/memeriksa/{id}', [MemeriksaController::class, "update"]);
-
-// Route untuk menampilkan daftar pemeriksaan
-Route::get('/pasien/periksa', [PeriksaController::class, 'dashboard'])->name('pasien.periksa.index');
-
-// Route untuk menampilkan form create
-Route::get('/pasien/periksa/create', [PeriksaController::class, 'create'])->name('pasien.periksa.create');
-
-// Route untuk menyimpan data pemeriksaan (POST)
-Route::post('/pasien/periksa', [PeriksaController::class, 'store'])->name('pasien.periksa.store');
-
-Route::get('/pasien/dashboard', function () {
-    return view('pasien.dashboard');
-});
-
-Route::get('/pasien/riwayat', function () {
-    return view('pasien.riwayat');
-});
-
-// Route ini duplikat dengan yang di atas, bisa dihapus
-// Route::get('/pasien/periksa', [PeriksaController::class, "dashboard"]);
-// Route::get('/pasien/periksa/create', [PeriksaController::class, "create"]);

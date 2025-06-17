@@ -1,14 +1,8 @@
 <?php
 
 namespace Database\Seeders;
-
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\JanjiPeriksa;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Periksa;
-use App\Models\Obat;
-use App\Models\DetailPeriksa;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,14 +11,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-
+        //CALL ALL DATA WANT SEEDER
         $this->call([
-            UserSeeder::class,
-            ObatSeeder::class,
-            PeriksaSeeder::class,
-            DetailPeriksaSeeder::class,
+            PoliSeeder::class,
+            UsersTableSeeder::class,
+            JadwalPeriksaTableSeeder::class,
+            JanjiPeriksaTableSeeder::class,
+            ObatTableSeeder::class,
+            PeriksaTableSeeder::class,
+            DetailPeriksaTableSeeder::class,
         ]);
     }
 }
