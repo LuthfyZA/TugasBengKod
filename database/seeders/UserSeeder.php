@@ -24,7 +24,7 @@ class UserSeeder extends Seeder
                 'no_hp' => '08129876543',
                 'email' => 'dr.andi@sumberwaras.com', // pastikan email valid
                 'role' => 'dokter',
-                'password' => Hash::make('password123'),
+                'password' => Hash::make('pasaaaaaaaasword123'),
             ],
             [
                 'nama' => 'Budi Pasien',

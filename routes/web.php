@@ -6,17 +6,30 @@ use App\Http\Controllers\PeriksaController;
 use App\Models\Obat;
 use App\Models\Periksa;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
+// Tambahkan Auth::routes() untuk mengaktifkan route autentikasi bawaan Laravel
+Auth::routes();
 
 // Route::get('/', function () {
 //     return view('layout.landingpage'); // Pastikan file berada di resources/views/layout/landingpage.blade.php
 // });
 
+// Route autentikasi original
 Route::get('/auth/login', function () {
     return view('auth.login');
 });
 
 Route::get('/auth/register', function () {
+    return view('auth.register');
+});
+
+// Tambahan route autentikasi
+Route::get('/login', function () {
+    return view('auth.login');
+});
+
+Route::get('/register', function () {
     return view('auth.register');
 });
 
@@ -31,14 +44,11 @@ Route::get('/dokter/obat/{id}/edit', [ObatController::class,"edit"]);
 Route::put('/dokter/obat/{id}', [ObatController::class,"update"]);
 Route::delete('/dokter/obat/{id}', [ObatController::class,"destroy"]);
 
-
 Route::get('/dokter/memeriksa', [MemeriksaController::class, "dashboard"]);
 Route::get('/dokter/memeriksa/{id}', [MemeriksaController::class, "memeriksa"]);
 Route::post('/dokter/memeriksa', [MemeriksaController::class, "store"]);
 Route::get('/dokter/memeriksa/{id}/edit', [MemeriksaController::class, "edit"]);
 Route::put('/dokter/memeriksa/{id}', [MemeriksaController::class, "update"]);
-
-
 
 // Route untuk menampilkan daftar pemeriksaan
 Route::get('/pasien/periksa', [PeriksaController::class, 'dashboard'])->name('pasien.periksa.index');
@@ -57,5 +67,6 @@ Route::get('/pasien/riwayat', function () {
     return view('pasien.riwayat');
 });
 
-Route::get('/pasien/periksa', [PeriksaController::class, "dashboard"]);
-Route::get('/pasien/periksa/create', [PeriksaController::class, "create"]);
+// Route ini duplikat dengan yang di atas, bisa dihapus
+// Route::get('/pasien/periksa', [PeriksaController::class, "dashboard"]);
+// Route::get('/pasien/periksa/create', [PeriksaController::class, "create"]);
